@@ -1,0 +1,156 @@
+[![image](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/cmake.yml/badge.svg?branch=main)](
+https://github.com/eoan-ermine-incubator/nsswitch/actions?query=workflow%3ACMake)
+
+A C++23 library for parsing nsswitch.conf, the Name Service Switch configuration file.
+
+# Requirements
+
+* C++23-compatible compiler
+* CMake
+
+# Usage
+
+## CMake
+
+### [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+
+Add to `CMakeLists.txt`:
+
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+  nsswitch
+  GIT_REPOSITORY https://github.com/eoan-ermine-incubator/nsswitch.git
+  GIT_TAG 252a04abc1c8809eb57164c8f79b11acae34861e
+)
+FetchContent_MakeAvailable(nsswitch)
+
+target_link_libraries(<insert-your-target-here> nsswitch::nsswitch)
+```
+
+### Install from source
+
+1. Build from source
+
+```bash
+git clone https://github.com/eoan-ermine-incubator/nsswitch.git
+cd nsswitch
+cmake -B build .
+cmake --build build
+cmake --install build
+```
+
+2. Add to `CMakeLists.txt`:
+
+```cmake
+find_package(nsswitch CONFIG REQUIRED)
+target_link_libraries(<insert-your-target-here> nsswitch::nsswitch)
+```
+
+### Add as a subdirectory
+
+1. Add `nsswitch` to your source tree as a Git submodule or by copying the source directory
+2. Add to `CMakeLists.txt`:
+
+```cmake
+add_subdirectory(nsswitch)
+target_link_libraries(<insert-your-target-here> nsswitch::nsswitch)
+```
+
+## API Reference
+
+nsswitch/config.h
+
+```cpp
+namespace nsswitch {
+
+struct Criterion {
+    bool inversion;
+
+    enum class Status { SUCCESS, NOTFOUND, UNAVAIL, TRYAGAIN } status;
+
+    enum class Action { RETURN, CONTINUE, MERGE } action;
+};
+
+struct Service {
+    std::string name;
+    std::vector<Criterion> criterions;
+};
+
+struct Entry {
+    std::string database;
+    std::vector<Service> services;
+};
+
+struct Config {
+    std::vector<Entry> entries;
+};
+
+}
+```
+
+nsswitch/parser.h
+
+```cpp
+#include <nsswitch/config.h>
+
+namespace nsswitch {
+
+struct ParseError {
+    std::size_t line;
+    std::string message;
+};
+
+[[nodiscard]]
+inline std::expected<Config, ParseError> parse(std::string_view input) {
+    return detail::Parser{input}.parse();
+}
+
+}
+```
+
+## Example
+
+```cpp
+#include <iostream>
+#include <string_view>
+
+#include <nsswitch/parser.h>
+
+int main() {
+    constexpr std::string_view input = R"(
+# Name Service Switch configuration
+passwd: files systemd
+group: files systemd
+shadow: files
+hosts: files dns [!UNAVAIL=return] my_custom_service
+networks: files [SUCCESS=merge NOTFOUND=continue]
+)";
+
+    auto result = nsswitch::parse(input);
+
+    if (!result) {
+        const auto& error = result.error();
+
+        std::cerr << "Line " << error.line << ": " << error.message
+                  << '\n';
+
+        return 1;
+    }
+
+    for (const auto& entry : result->entries) {
+        std::cout << entry.database << ":\n";
+
+        for (const auto& service : entry.services) {
+            std::cout << "  " << service.name << '\n';
+
+            for (const auto& criterion : service.criterions) {
+                std::cout << "    " << (criterion.inversion ? "!" : "")
+                          << static_cast<int>(criterion.status) << " -> "
+                          << static_cast<int>(criterion.action) << '\n';
+            }
+        }
+    }
+}
+```
