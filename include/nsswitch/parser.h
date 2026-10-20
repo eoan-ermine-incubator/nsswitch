@@ -17,6 +17,8 @@ struct ParseError {
     std::string message;
 };
 
+namespace detail {
+
 [[nodiscard]]
 inline std::expected<Criterion::Status, std::string> parse_status(
     std::string_view value) {
@@ -37,8 +39,6 @@ inline std::expected<Criterion::Action, std::string> parse_action(
 
     return std::unexpected("unknown criterion action: " + std::string(value));
 }
-
-namespace detail {
 
 [[nodiscard]]
 inline std::string uppercase(std::string_view value) {
