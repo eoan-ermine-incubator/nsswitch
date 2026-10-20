@@ -1,0 +1,2 @@
+add_executable(nsswitch_example nsswitch_example.cpp)
+target_link_libraries(nsswitch_example PRIVATE nsswitch)
