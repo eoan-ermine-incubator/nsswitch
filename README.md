@@ -1,12 +1,12 @@
-[![image](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/cmake.yml/badge.svg?branch=main)](
+[![CMake CI](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/cmake.yml/badge.svg?branch=main)](
 https://github.com/eoan-ermine-incubator/nsswitch/actions?query=workflow%3ACMake)
 
 A C++23 library for parsing nsswitch.conf, the Name Service Switch configuration file.
 
 # Requirements
 
-* C++23-compatible compiler
-* CMake
+* C++23-compatible compiler (gcc 12+, clang 16+, msvc 19.33+)
+* CMake (3.20+)
 
 # Usage
 
@@ -45,17 +45,18 @@ cmake --install build
 
 ```cmake
 find_package(nsswitch CONFIG REQUIRED)
-target_link_libraries(<insert-your-target-here> nsswitch::nsswitch)
+target_link_libraries(<insert-your-target-here> PRIVATE nsswitch::nsswitch)
 ```
 
 ### Add as a subdirectory
 
-1. Add `nsswitch` to your source tree as a Git submodule or by copying the source directory
-2. Add to `CMakeLists.txt`:
+Add the repository to your source tree (for example, as a Git
+submodule in `external/nsswitch`), then add the following to
+your `CMakeLists.txt`:
 
 ```cmake
-add_subdirectory(nsswitch)
-target_link_libraries(<insert-your-target-here> nsswitch::nsswitch)
+add_subdirectory(external/nsswitch)
+target_link_libraries(<insert-your-target-here> PRIVATE nsswitch::nsswitch)
 ```
 
 ## API Reference
@@ -154,3 +155,7 @@ networks: files [SUCCESS=merge NOTFOUND=continue]
     }
 }
 ```
+
+# LICENSE
+
+This project is licensed under the [MIT License](LICENSE).
