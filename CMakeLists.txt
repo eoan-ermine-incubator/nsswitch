@@ -6,6 +6,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(NSSWITCH_BUILD_TESTS "Build tests" ON)
+option(NSSWITCH_BUILD_EXAMPLES "Build examples" ON)
+option(NSSWITCH_BUILD_WASM_EXAMPLE "Build WASM example" OFF)
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -61,5 +65,10 @@ install(FILES
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/nsswitch"
 )
 
-add_subdirectory(examples)
-add_subdirectory(tests)
+if (NSSWITCH_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+if (NSSWITCH_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

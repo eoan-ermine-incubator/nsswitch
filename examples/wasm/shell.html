@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>nsswitch parser</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; }
+        textarea, #output {
+            width: 100%; box-sizing: border-box;
+            font-family: ui-monospace, monospace; font-size: 14px;
+        }
+        textarea { min-height: 120px; }
+        #output { min-height: 120px; white-space: pre-wrap; background: #f4f4f4; padding: .5rem; }
+        button { margin-top: .5rem; padding: .4rem 1rem; }
+    </style>
+</head>
+<body>
+    <h1>nsswitch parser</h1>
+
+    <textarea id="input" placeholder="passwd: files sss"></textarea>
+    <button id="run" disabled>Parse</button>
+
+    <h2>Result</h2>
+    <div id="output"></div>
+
+    <script src="wasm_example.js"></script>
+    <script>
+        Module.onRuntimeInitialized = function () {
+            document.getElementById("run").disabled = false;
+        };
+
+        var validate = Module.cwrap("validate", "number", ["string"]);
+        var freeString = Module.cwrap("free_string", null, ["number"]);
+
+        document.getElementById("run").addEventListener("click", function () {
+            var text = document.getElementById("input").value;
+            var ptr = validate(text);
+            var result = Module.UTF8ToString(ptr);
+            freeString(ptr);
+            document.getElementById("output").textContent = result;
+        });
+    </script>
+</body>
+</html>
