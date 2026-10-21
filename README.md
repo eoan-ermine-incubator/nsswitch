@@ -160,6 +160,29 @@ networks: files [SUCCESS=merge NOTFOUND=continue]
 }
 ```
 
+Output:
+
+```bash
+eoanermine@eoanermine:~/nsswitch/build$ ./examples/nswitch_example
+passwd:
+  files
+  systemd
+group:
+  files
+  systemd
+shadow:
+  files
+hosts:
+  files
+  dns
+    !UNAVAIL -> RETURN
+  my_custom_service
+networks:
+  files
+    SUCCESS -> MERGE
+    NOTFOUND -> CONTINUE
+```
+
 # LICENSE
 
 This project is licensed under the [MIT License](LICENSE).
