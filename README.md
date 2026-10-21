@@ -61,7 +61,7 @@ target_link_libraries(<insert-your-target-here> PRIVATE nsswitch::nsswitch)
 
 ## API Reference
 
-nsswitch/config.h
+[nsswitch/config.h](include/nsswitch/config.h)
 
 ```cpp
 namespace nsswitch {
@@ -88,10 +88,14 @@ struct Config {
     std::vector<Entry> entries;
 };
 
+std::string to_string(Criterion::Status);
+
+std::string to_string(Criterion::Action);
+
 }
 ```
 
-nsswitch/parser.h
+[nsswitch/parser.h](include/nsswitch/parser.h)
 
 ```cpp
 #include <nsswitch/config.h>

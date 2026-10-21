@@ -32,8 +32,8 @@ networks: files [SUCCESS=merge NOTFOUND=continue]
 
             for (const auto& criterion : service.criterions) {
                 std::cout << "    " << (criterion.inversion ? "!" : "")
-                          << static_cast<int>(criterion.status) << " -> "
-                          << static_cast<int>(criterion.action) << '\n';
+                          << nsswitch::to_string(criterion.status) << " -> "
+                          << nsswitch::to_string(criterion.action) << '\n';
             }
         }
     }

@@ -27,4 +27,30 @@ struct Config {
     std::vector<Entry> entries;
 };
 
+std::string to_string(Criterion::Status status) {
+    switch (status) {
+    case Criterion::Status::SUCCESS:
+        return "SUCCESS";
+    case Criterion::Status::NOTFOUND:
+        return "NOTFOUND";
+    case Criterion::Status::UNAVAIL:
+        return "UNAVAIL";
+    case Criterion::Status::TRYAGAIN:
+        return "TRYAGAIN";
+    }
+    return "unknown";
+}
+
+std::string to_string(Criterion::Action action) {
+    switch (action) {
+    case Criterion::Action::RETURN:
+        return "RETURN";
+    case Criterion::Action::CONTINUE:
+        return "CONTINUE";
+    case Criterion::Action::MERGE:
+        return "MERGE";
+    }
+    return "unknown";
+}
+
 }  // namespace nsswitch
