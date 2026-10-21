@@ -1,6 +1,7 @@
 [![Linux](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/linux.yml/badge.svg?branch=main)](
 https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/linux.yml) [![MacOS](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/macos.yml/badge.svg?branch=main)](
-https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/macos.yml)
+https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/macos.yml) [![Windows](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/windows.yml/badge.svg?branch=main)](
+https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/windows.yml)
 
 
 A C++23 library for parsing nsswitch.conf, the Name Service Switch configuration file.
