@@ -3,6 +3,8 @@ https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/linux.yml)
 
 A C++23 library for parsing nsswitch.conf, the Name Service Switch configuration file.
 
+[Try it online!](https://eoan-ermine-incubator.github.io/nsswitch/)
+
 # Requirements
 
 * C++23-compatible compiler (gcc 12+, clang 16+, msvc 19.33+)

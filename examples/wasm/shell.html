@@ -17,7 +17,14 @@
 <body>
     <h1>nsswitch parser</h1>
 
-    <textarea id="input" placeholder="passwd: files sss"></textarea>
+    <textarea id="input" placeholder="passwd: files sss">
+# Name Service Switch configuration
+passwd: files systemd
+group: files systemd
+shadow: files
+hosts: files dns [!UNAVAIL=return] my_custom_service
+networks: files [SUCCESS=merge NOTFOUND=continue]
+    </textarea>
     <button id="run" disabled>Parse</button>
 
     <h2>Result</h2>
@@ -25,16 +32,18 @@
 
     <script src="wasm_example.js"></script>
     <script>
+        var freeString, parse;
+
         Module.onRuntimeInitialized = function () {
+            parse = Module.cwrap("parse", "number", ["string"]);
+            freeString = Module.cwrap("free_string", null, ["number"]);
+
             document.getElementById("run").disabled = false;
         };
 
-        var validate = Module.cwrap("validate", "number", ["string"]);
-        var freeString = Module.cwrap("free_string", null, ["number"]);
-
         document.getElementById("run").addEventListener("click", function () {
             var text = document.getElementById("input").value;
-            var ptr = validate(text);
+            var ptr = parse(text);
             var result = Module.UTF8ToString(ptr);
             freeString(ptr);
             document.getElementById("output").textContent = result;

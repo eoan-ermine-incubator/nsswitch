@@ -1,0 +1,78 @@
+name: Pages
+
+env:
+  EM_VERSION: 6.0.13
+  EM_CACHE_FOLDER: 'emsdk-cache'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup cache
+      id: cache-system-libraries
+      uses: actions/cache@v5
+      with:
+        path: ${{env.EM_CACHE_FOLDER}}
+        key: ${{env.EM_VERSION}}-${{ runner.os }}
+
+    - name: Setup Emscripten
+      uses: emscripten-core/setup-emsdk@v16
+      with:
+          version: ${{env.EM_VERSION}}
+          actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
+
+    - name: Verify Emscripten setup
+      run: emcc -v
+
+    - name: Configure CMake
+      run: |
+        emcmake cmake -B ${{github.workspace}}/build_wasm -S . \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DNSSWITCH_BUILD_WASM_EXAMPLE=ON \
+          -DNSSWITCH_BUILD_EXAMPLES=ON \
+          -DNSSWITCH_BUILD_TESTS=OFF
+
+    - name: Build WASM example
+      run: cmake --build ${{github.workspace}}/build_wasm --target wasm_example
+
+    - name: Assemble site
+      run: |
+        mkdir site
+        cp -r build_wasm/examples/wasm/*.{html,js,wasm} site
+
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+
+    steps:
+    - uses: actions/deploy-pages@v4
+      id: deployment

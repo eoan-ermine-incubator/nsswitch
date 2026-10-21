@@ -8,7 +8,7 @@
 
 namespace {
 
-std::string validate_impl(const std::string& input) {
+std::string parse_impl(const std::string& input) {
     auto result = nsswitch::parse(input);
 
     if (!result) {
@@ -46,9 +46,9 @@ std::string validate_impl(const std::string& input) {
 extern "C" {
 
 EMSCRIPTEN_KEEPALIVE
-char* validate(const char* input) {
+char* parse(const char* input) {
     const std::string text = input != nullptr ? input : "";
-    const std::string result = validate_impl(text);
+    const std::string result = parse_impl(text);
     char* buffer = static_cast<char*>(std::malloc(result.size() + 1));
     std::memcpy(buffer, result.c_str(), result.size() + 1);
     return buffer;

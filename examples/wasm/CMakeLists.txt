@@ -3,7 +3,7 @@ set_target_properties(wasm_example PROPERTIES SUFFIX ".js")
 target_link_libraries(wasm_example PRIVATE nsswitch)
 target_link_options(wasm_example PRIVATE
     "SHELL:-s EXPORTED_RUNTIME_METHODS=ccall,cwrap,UTF8ToString"
-    "SHELL:-s EXPORTED_FUNCTIONS=_validate,_free_string")
+    "SHELL:-s EXPORTED_FUNCTIONS=_parse,_free_string")
 
 add_custom_command(TARGET wasm_example POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_if_different
