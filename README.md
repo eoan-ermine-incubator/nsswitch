@@ -1,5 +1,5 @@
-[![CMake CI](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/cmake.yml/badge.svg?branch=main)](
-https://github.com/eoan-ermine-incubator/nsswitch/actions?query=workflow%3ACMake)
+[![Linux](https://github.com/eoan-ermine-incubator/nsswitch/actions/workflows/linux.yml/badge.svg?branch=main)](
+https://github.com/eoan-ermine-incubator/nsswitch/actions?query=workflow%3ALinux)
 
 A C++23 library for parsing nsswitch.conf, the Name Service Switch configuration file.
 
