@@ -185,6 +185,14 @@ networks:
     NOTFOUND -> CONTINUE
 ```
 
+# Development guide
+
+## CMake options
+
+* `NSSWITCH_BUILD_TESTS`: Build [tests](https://github.com/eoan-ermine-incubator/nsswitch/tree/main/tests) (default: ON)
+* `NSSWITCH_BUILD_EXAMPLES`: Build [examples](https://github.com/eoan-ermine-incubator/nsswitch/tree/main/examples) (default: ON)
+* `NSSWITCH_BUILD_WASM_EXAMPLE`: Build [WASM example](https://github.com/eoan-ermine-incubator/nsswitch/tree/main/examples/wasm) (default: OFF)
+
 # LICENSE
 
 This project is licensed under the [MIT License](LICENSE).
