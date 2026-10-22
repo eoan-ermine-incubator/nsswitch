@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string_view>
 
-#include "nsswitch/parser.h"
+#include "nsswitch/nsswitch.h"
 
 int main() {
     constexpr std::string_view input = R"(

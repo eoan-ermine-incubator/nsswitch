@@ -66,7 +66,7 @@ target_link_libraries(<insert-your-target-here> PRIVATE nsswitch::nsswitch)
 
 ## API Reference
 
-[nsswitch/config.h](include/nsswitch/config.h)
+[nsswitch/nsswitch.h](include/nsswitch/nsswitch.h)
 
 ```cpp
 namespace nsswitch {
@@ -78,6 +78,10 @@ struct Criterion {
 
     enum class Action { RETURN, CONTINUE, MERGE } action;
 };
+
+inline std::string to_string(Criterion::Status);
+
+inline std::string to_string(Criterion::Action);
 
 struct Service {
     std::string name;
@@ -92,20 +96,6 @@ struct Entry {
 struct Config {
     std::vector<Entry> entries;
 };
-
-std::string to_string(Criterion::Status);
-
-std::string to_string(Criterion::Action);
-
-}
-```
-
-[nsswitch/parser.h](include/nsswitch/parser.h)
-
-```cpp
-#include <nsswitch/config.h>
-
-namespace nsswitch {
 
 struct ParseError {
     std::size_t line;
@@ -126,7 +116,7 @@ inline std::expected<Config, ParseError> parse(std::string_view input) {
 #include <iostream>
 #include <string_view>
 
-#include <nsswitch/parser.h>
+#include <nsswitch/nsswitch.h>
 
 int main() {
     constexpr std::string_view input = R"(

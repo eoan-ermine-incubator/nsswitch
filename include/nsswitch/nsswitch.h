@@ -8,9 +8,55 @@
 #include <utility>
 #include <vector>
 
-#include "config.h"
-
 namespace nsswitch {
+
+struct Criterion {
+  bool inversion{false};
+
+  enum class Status { SUCCESS, NOTFOUND, UNAVAIL, TRYAGAIN } status;
+
+  enum class Action { RETURN, CONTINUE, MERGE } action;
+};
+
+struct Service {
+  std::string name;
+  std::vector<Criterion> criterions;
+};
+
+struct Entry {
+  std::string database;
+  std::vector<Service> services;
+};
+
+struct Config {
+  std::vector<Entry> entries;
+};
+
+inline std::string to_string(Criterion::Status status) {
+  switch (status) {
+  case Criterion::Status::SUCCESS:
+    return "SUCCESS";
+  case Criterion::Status::NOTFOUND:
+    return "NOTFOUND";
+  case Criterion::Status::UNAVAIL:
+    return "UNAVAIL";
+  case Criterion::Status::TRYAGAIN:
+    return "TRYAGAIN";
+  }
+  return "unknown";
+}
+
+inline std::string to_string(Criterion::Action action) {
+  switch (action) {
+  case Criterion::Action::RETURN:
+    return "RETURN";
+  case Criterion::Action::CONTINUE:
+    return "CONTINUE";
+  case Criterion::Action::MERGE:
+    return "MERGE";
+  }
+  return "unknown";
+}
 
 struct ParseError {
   std::size_t line;

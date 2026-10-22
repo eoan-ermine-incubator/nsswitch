@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "nsswitch/parser.h"
+#include "nsswitch/nsswitch.h"
 
 TEST(NsswitchParserTest, NsswitchLinuxMan) {
   // Source: https://man7.org/linux/man-pages/man5/nsswitch.conf.5.html

@@ -4,7 +4,7 @@
 
 #include <emscripten/emscripten.h>
 
-#include "nsswitch/parser.h"
+#include "nsswitch/nsswitch.h"
 
 namespace {
 

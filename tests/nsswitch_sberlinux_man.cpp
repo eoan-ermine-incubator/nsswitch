@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "nsswitch/parser.h"
+#include "nsswitch/nsswitch.h"
 
 TEST(NsswitchParserTest, NsswitchSberlinuxMan1) {
   // Source:
