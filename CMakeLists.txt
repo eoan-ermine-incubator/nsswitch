@@ -11,18 +11,11 @@ option(NSSWITCH_BUILD_EXAMPLES "Build examples" ON)
 option(NSSWITCH_BUILD_WASM_EXAMPLE "Build WASM example" OFF)
 
 include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-  DOWNLOAD_EXTRACT_TIMESTAMP NEW
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-set(INSTALL_GTEST OFF)
-FetchContent_MakeAvailable(googletest)
 
 add_library(nsswitch INTERFACE)
 add_library(nsswitch::nsswitch ALIAS nsswitch)
+
+target_compile_features(nsswitch INTERFACE cxx_std_23)
 
 target_include_directories(nsswitch INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -70,5 +63,15 @@ if (NSSWITCH_BUILD_EXAMPLES)
 endif()
 
 if (NSSWITCH_BUILD_TESTS)
+    FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP NEW
+    )
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    set(INSTALL_GTEST OFF)
+    FetchContent_MakeAvailable(googletest)
+
     add_subdirectory(tests)
 endif()
